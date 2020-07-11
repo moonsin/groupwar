@@ -2,8 +2,9 @@
 <div class="root">
   <h1 class="title">Player Select</h1>
   <div class="select-container" id="selectContainer">
-  <startgame-character  v-for="id in member" v-bind:key=id :character-id=id v-on:character-click="characterClick" > </startgame-character>
+    <startgame-character  v-for="id in member" v-bind:key=id :character-id=id :character-id-ch=name_dict[id] v-on:character-click="characterClick" > </startgame-character>
    </div>
+   <span class='start-btn'>START</span>
 </div>
 </template>
 
@@ -14,8 +15,26 @@ export default {
   components:{startgameCharacter},
   data:function(){
       return{
-          member:["dailiange","xinai","abi","apan","caizige","dige","haizige","heimao","shuaiyang","xiaomi"],
-          current_list:[]
+          member:["dailiange","xinai","abi","apan","caizige","dige","haizige","heimao","shuaiyang","xiaomi","xueda","dailianerge","yue","laowang","ruijie","gunge"],
+          current_list:[],
+          name_dict:{
+            "dailiange":"代练哥",
+            "xinai":"西奈",
+            "abi":"阿比",
+            "apan":"阿攀",
+            "caizige":"菜子哥",
+            "dige":"弟哥",
+            "haizige":"孩子哥",
+            "heimao":"黑猫",
+            "shuaiyang":"帅扬",
+            "xiaomi":"小米",
+            "xueda":"雪大",
+            "dailianerge":"代练二哥",
+            "yue":"月",
+            "laowang":"老王",
+            "ruijie":"瑞姐",
+            "gunge":"棍哥"
+          }
       }
   },
   methods:{
@@ -26,7 +45,6 @@ export default {
       console.log(this.current_list)
     }
   }
-
 }
 </script>
 
@@ -136,5 +154,54 @@ body{
 }
 
 
+.video-game-button {
+	text-shadow: 1px 1px pink, -1px -1px maroon;
+
+	line-height: 1.5em;
+	text-align: center;
+	display: inline-block;
+	width: 1.5em;
+	-webkit-border-radius: .75em;
+	-moz-border-radius: .75em;
+	-o-border-radius: .75em;
+		border-radius: .75em;
+	background-color: red;
+	-webkit-box-shadow:  0 .2em maroon;
+	-moz-box-shadow:  0 .2em maroon;
+	-o-box-shadow:  0 .2em maroon;
+	box-shadow:  0 .2em maroon;
+	color: red;
+	margin: 5px;
+	background-color: red;
+	background-image: -o-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+	background-image: -moz-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+	background-image: -webkit-linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+	background-image: linear-gradient(left top, pink 3%, red 22%, maroon 99%);
+	cursor: pointer;
+  padding-left: 5px;
+}
+.start-btn{
+  font-size:40px;
+  text-align: center;
+	display: inline-block;
+	margin:330px auto;
+    font-weight: bold;
+    padding: 10px ;
+    background-color: lightgray;
+    text-shadow: -1px -1px black, 1px 1px white;
+    color: gray;
+    -webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
+    box-shadow: 0 .2em gray; 
+    cursor: pointer;
+
+}
+.video-game-button:active, .start-btn:active {
+	box-shadow: none;
+	position: relative;
+	top: .2em;
+}
 
 </style>
