@@ -11,7 +11,7 @@
       :current-list=current_list> 
     </startgame-character>
    </div>
-   <h1 id="result" class='title'>{{result_content}}</h1>
+   <h1 id="result">{{result_content}}</h1>
    <span class='start-btn' @click="startGame">START</span>
 
 </div>
