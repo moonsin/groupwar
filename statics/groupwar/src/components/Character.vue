@@ -1,5 +1,5 @@
 <template>
-    <button class="character" :id=characterId @click="$emit('character-click')">
+    <button class="character" :class="{'active':isActive}" :id=characterId @click="characterClick">
       <img class="character__img" :src=src>
       <p class="character__name">{{characterId}}</p>
     </button>
@@ -11,9 +11,17 @@ export default {
   props:["characterId"],
   data:function(){
       return{
-          src:"/static/avatar/" + this.characterId + ".jpg"
+          src:"/static/avatar/" + this.characterId + ".jpg",
+          isActive:false
       }
   },
+  methods:{
+    characterClick:function(e){
+      this.isActive = !this.isActive 
+      this.$emit('character-click',this.characterId)
+    }
+  } 
+  
 }
 </script>
 

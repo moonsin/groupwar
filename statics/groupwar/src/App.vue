@@ -20,7 +20,7 @@ src:url('./assets/HYShangWeiShouShuW.ttf');
 
 body{
   height: 100%;
-  background-image: url("http://pickorban.johnr.io/wp-content/themes/lolchampdb/img/primary-bg.jpg");
+  background-color: #0d0d3a;
 }
 
 #app {

@@ -1,13 +1,8 @@
 <template>
 <div class="root">
-  <h1 class="title">内战</h1>
+  <h1 class="title">Player Select</h1>
   <div class="select-container" id="selectContainer">
-    <button class="character active" id="akuma">
-      <img class="character__img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/813538/akuma.png">
-      <p class="character__name">Akuma</p>
-    </button>
-  <startgame-character  v-for="id in member" v-bind:key=id :character-id=id v-on:character-click="test" > </startgame-character>
-  <startgame-character character-id="xinai" class="active"> </startgame-character>
+  <startgame-character  v-for="id in member" v-bind:key=id :character-id=id v-on:character-click="characterClick" > </startgame-character>
    </div>
 </div>
 </template>
@@ -24,8 +19,11 @@ export default {
       }
   },
   methods:{
-    test:()=>{
-      cosnole.log('111')
+    characterClick:function(id){
+      console.log(this.current_list)
+      var index = this.current_list.indexOf(id)
+      index == -1 ? this.current_list.push(id):this.current_list.splice(index,1);
+      console.log(this.current_list)
     }
   }
 
@@ -41,9 +39,11 @@ body{
 }
 
 .title {
-  font-family: bai;
-  color: #dac751;
-  font-size:40px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #dac751;
+    letter-spacing: 0.1em;
+    text-shadow: 0px 2px 2px rgba(255, 255, 255, 0.6);
 }
 
 .select-container {
@@ -71,7 +71,6 @@ body{
 }
 
 .character__img {
-  animation: flash 300ms linear;
   filter: grayscale(0.84);
 	width: 100%;
 }
@@ -79,27 +78,6 @@ body{
 .character__img, .character__name {
     margin: 0;
     padding: 0;
-}
-
-@keyframes flash {
-	0% {
-		filter: brightness(100%);
-	}
-	20% {
-		filter: brightness(150%);
-	}
-	40% {
-		filter: brightness(100%);
-	}
-	60% {
-		filter: brightness(150%);
-	}
-	80% {
-		filter: brightness(100%);
-	}
-	100% {
-		filter: brightness(150%);
-	}
 }
 
 .active {
@@ -135,5 +113,28 @@ body{
     -webkit-animation: flash 300ms linear;
     animation: flash 300ms linear;
 }
+
+@keyframes flash {
+	0% {
+		filter: brightness(100%);
+	}
+	20% {
+		filter: brightness(150%);
+	}
+	40% {
+		filter: brightness(100%);
+	}
+	60% {
+		filter: brightness(150%);
+	}
+	80% {
+		filter: brightness(100%);
+	}
+	100% {
+		filter: brightness(150%);
+	}
+}
+
+
 
 </style>
