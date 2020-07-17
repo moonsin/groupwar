@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import StartGame from '@/components/StartGame'
 import Index from '@/components/Index'
 
 Vue.use(Router)
@@ -12,10 +10,16 @@ export default new Router({
       path: '/',
       name: 'Index',
       component: Index
-    },{
+    },
+    {
       path: '/startgame',
       name: 'StartGame',
-      component: StartGame
+      component: () => import('@/components/StartGame')
+    },
+    {
+      path: '/rankList',
+      name: 'RankList',
+      component: () => import('@/components/rank-list/index')
     }
   ]
 })
