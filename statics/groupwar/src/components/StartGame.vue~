@@ -1,7 +1,7 @@
 <template>
 <div class="root">
   <h1 class="title">Player Select</h1>
-  <div class="select-container" id="selectContainer">
+  <div class="select-container" id="selectContainer" v-if="show_all">
     <startgame-character  
       v-for="id in member" 
       v-bind:key=id 
@@ -11,8 +11,30 @@
       :current-list=current_list> 
     </startgame-character>
    </div>
-   <h1 id="result">{{result_content}}</h1>
+
+   <div class="show-team" >
+    <startgame-character  
+      v-for="id in team1" 
+      v-bind:key=id 
+      :character-id=id 
+      :character-id-ch=name_dict[id] 
+      :current-list=current_list> 
+    </startgame-character>
+   </div  >
+   <h1 class="title"> VS </h1>
+    <div class="show-team">
+    <startgame-character  
+      v-for="id in team2" 
+      v-bind:key=id 
+      :character-id=id 
+      :character-id-ch=name_dict[id] 
+      :current-list=current_list> 
+    </startgame-character>
+   </div>
+
+   <!-- <h1 id="result" class='title'>{{result_content}}</h1> -->
    <span class='start-btn' @click="startGame">START</span>
+   <span class='reset-btn' @click="resetGame">RESET</span>
 
 </div>
 </template>
@@ -47,11 +69,15 @@ export default {
             "gunge":"棍哥"
           },
           result_content:"",    
+          team1:[],
+          team2:[],
+          show_all:true,
       }
   },
 
   mounted (){
     this.getCurrentList() 
+    this.getShowAll() 
   },
 
   methods:{
@@ -71,9 +97,26 @@ export default {
         })
     },
 
+    getShowAll:function(){
+       let axiosUrl = "http://localhost:9527/get_show_all"
+      let self=this
+      axios.get(axiosUrl)
+        .then(function(response){
+          setTimeout(() =>{
+            self.getShowAll() 
+          },100)
+          let result = eval(response.data)
+          self.show_all = result[0]=="true"
+          self.team1 = self.getIdList(result[1])
+          self.team2 = self.getIdList(result[2])
+        })
+      .catch(function(error){
+          console.log(error);
+        })
+    },
+
     initTest:function(){
       this.current_list.push('yue')
-      console.log(this.current_list)
     },
 
     characterClick:function(data){
@@ -101,11 +144,53 @@ export default {
       })
       .then(function(response){
         self.result_content = response.data
+        console.log(self.result_content)
+        let re = eval(self.result_content)
+        self.team1 = self.getIdList(re[0])
+        self.team2 = self.getIdList(re[1])
+        self.show_all = false
+        let axiosUrl = "http://localhost:9527/update_show_all"
+        axios.post(axiosUrl,{
+            show_all:"false",
+        })
+        .then(function(response){
+          console.log(response);
+        })
+          .catch(function(error){
+            console.log(error);
+        })
+   
       })
       .catch(function(error){
         console.log(error);
       })
+    },
+
+    resetGame:function(){
+      let axiosUrl = "http://localhost:9527/reset_game"
+      let self=this
+      axios.get(axiosUrl)
+        .then(function(response){})
+      .catch(function(error){
+          console.log(error);
+        })
+    
+    },
+
+    getIdList:function(nameList){
+      var idList = []
+       
+      nameList.forEach(v=>{
+        for(var key in this.name_dict){
+          if(this.name_dict[key] == v){
+            idList.push(key) 
+            break;
+          } 
+        } 
+      })
+      return idList
     }
+
   },
 
 }
@@ -243,6 +328,7 @@ body{
 	cursor: pointer;
   padding-left: 5px;
 }
+
 .start-btn{
   font-size:40px;
   text-align: center;
@@ -259,12 +345,33 @@ body{
 	border-radius: 7px;
     box-shadow: 0 .2em gray; 
     cursor: pointer;
-
 }
+
+.reset-btn{
+  font-size:40px;
+  text-align: center;
+	display: inline-block;
+	margin:330px 30px;
+    font-weight: bold;
+    padding: 10px ;
+    background-color: lightgray;
+    text-shadow: -1px -1px black, 1px 1px white;
+    color: gray;
+    -webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	-o-border-radius: 7px;
+	border-radius: 7px;
+    box-shadow: 0 .2em gray; 
+    cursor: pointer;
+}
+
 .video-game-button:active, .start-btn:active {
 	box-shadow: none;
 	position: relative;
 	top: .2em;
 }
 
+.show-team{
+  margin-top:30px;
+}
 </style>

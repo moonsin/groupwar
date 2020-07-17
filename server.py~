@@ -15,7 +15,10 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 ranker = Ranker.Ranker()
-current_list = ["yue","dailiange"]
+current_list = []
+team1 = []
+team2 = []
+show_all = "true"
 socketio = SocketIO(app)
 
 name_dict ={
@@ -58,9 +61,13 @@ def start_game():
 '''
 @app.route("/start_game",methods=['post','get'])
 def start_game():
+    global team1,team2
     logging.info("start_game?players=%s&must_together=%s" % (",".join(current_list),"[]"))
     player_list = [name_dict[item] for item in current_list]
-    return str(ranker.start_game(player_list,[]))
+    result = ranker.start_game(player_list,[])
+    team1 = result[0]
+    team2 = result[1]
+    return str([team1,team2])
 
 @app.route("/show_list")
 def show_list():
@@ -77,10 +84,33 @@ def update():
 def get_current_list():
     return ",".join(current_list)
 
+@app.route("/get_show_all")
+def get_show_all():
+    return str([show_all,team1,team2])
+
+@app.route("/update_show_all",methods=['post','get'])
+def update_show_all():
+    global show_all
+    data = request_parse(request)
+    show_all = data['show_all']
+    return "success"
+
+@app.route("/reset_game",methods=['post','get'])
+def reset_game():
+    global show_all, team1, team2, current_list
+    show_all = "true"
+    team1 = []
+    team2 = []
+    current_list = []
+    return "success"
+
+
+
 @app.route("/update_current_list",methods=['post','get'])
 def update_current_list():
+    if show_all == "false":
+        return "cannot set current list"
     data = request_parse(request)
-    print(data)
     new_id = data['id']
     active = data['active']
     if active and new_id not in current_list:
