@@ -12,8 +12,8 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = function (options) {
-  options = options || {}
+exports.cssLoaders = function (options = {}) {
+  // options = options || {}
 
   const cssLoader = {
     loader: 'css-loader',

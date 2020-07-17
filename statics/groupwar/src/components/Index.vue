@@ -1,11 +1,11 @@
 <template>
     <div class="root">
-        <!--<img class="index_logo" src="../assets/logo2.jpeg"> --> 
         <div class="index_options">
-          <h1 @click="startgame" class="opntion"> 开始游戏 </h1>
-          <h1> 群友排名 </h1>
-          <h1> 更新分数 </h1>
-          <h1> 人员名单 </h1>
+          <template v-if="menuList && menuList.length > 0">
+            <div v-for="menu in menuList">
+              <span @click="jump(menu.routerParams)">{{menu.name}}</span>
+            </div>
+          </template>
         </div>
     </div>
 </template>
@@ -13,9 +13,31 @@
 <script>
 export default {
   name: 'Index',
+  data() {
+    return {
+      menuList: []
+    }
+  },
+  created() {
+    this.init()
+  },
   methods:{
-    startgame(){
-      this.$router.push({path:'/startgame'})
+    jump(params) {
+      if(params && params.name) {
+        this.$router.push(params)
+      }
+    },
+    init() {
+      this.initMenuList()
+    },
+    initMenuList() {
+      let res = [
+        { name: '开始游戏', routerParams: { name: 'StartGame'} },
+        { name: '群友排名', routerParams: { name: 'RankList'} },
+        { name: '更新分数', routerParams: { name: 'Index'} },
+        { name: '人员名单', routerParams: { name: 'Index'} },
+      ]
+      this.menuList = res
     }
   }
 }
@@ -36,11 +58,9 @@ export default {
   color:white;
 }
 
-.index_options h1{
+.index_options span{
+  display: block;
   font-size: 40px;
-}
-
-.opntion{
   cursor: pointer;
 }
 </style>
