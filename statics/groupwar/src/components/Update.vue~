@@ -1,17 +1,5 @@
 <template>
-<div class="root">
-  <h1 class="title">Player Select</h1>
-  <div class="select-container" id="selectContainer" v-if="show_all">
-    <startgame-character  
-      v-for="id in member" 
-      v-bind:key=id 
-      :character-id=id 
-      :character-id-ch=name_dict[id] 
-      v-on:character-click="characterClick" 
-      :current-list=current_list> 
-    </startgame-character>
-   </div>
-
+  <div>
    <div class="show-team" >
     <startgame-character  
       v-for="id in team1" 
@@ -31,13 +19,14 @@
       :current-list=current_list> 
     </startgame-character>
    </div>
-
    <!-- <h1 id="result" class='title'>{{result_content}}</h1> -->
-   <span class='start-btn' @click="startGame">START</span>
-   <span class='reset-btn' @click="resetGame">RESET</span>
+   <input v-model="psdInput" placeholder="password" class="psd-input">
+   <span class='start-btn' @click="winClick('1')">Team1 win</span>
+   <span class='reset-btn' @click="winClick('2')">Team2 win</span>
 
-</div>
+  </div>
 </template>
+
 
 <script>
 import startgameCharacter from './Character.vue'
@@ -72,10 +61,11 @@ export default {
           team1:[],
           team2:[],
           show_all:true,
+          psdInput:'',
+          passWord:'godloveshuman',
           url:'http://localhost:9527'
       }
   },
-
   mounted (){
     this.getCurrentList() 
     this.getShowAll() 
@@ -84,13 +74,13 @@ export default {
   methods:{
 
     getCurrentList: function(){
-      let axiosUrl = url + "/get_current_list"
+      let axiosUrl = this.url + "/get_current_list"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
           setTimeout(() =>{
             self.getCurrentList() 
-          },50)
+          },500)
           self.current_list = response.data.split(',')
         })
       .catch(function(error){
@@ -99,13 +89,13 @@ export default {
     },
 
     getShowAll:function(){
-       let axiosUrl = url + "/get_show_all"
+       let axiosUrl = this.url + "/get_show_all"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
           setTimeout(() =>{
             self.getShowAll() 
-          },50)
+          },100)
           let result = eval(response.data)
           self.show_all = result[0]=="true"
           self.team1 = self.getIdList(result[1])
@@ -114,68 +104,6 @@ export default {
       .catch(function(error){
           console.log(error);
         })
-    },
-
-    initTest:function(){
-      this.current_list.push('yue')
-    },
-
-    characterClick:function(data){
-      let id=data['id']
-      var index = this.current_list.indexOf(id)
-      index == -1 ? this.current_list.push(id):this.current_list.splice(index,1);
-      let axiosUrl = url + "/update_current_list"
-      axios.post(axiosUrl,{
-          id:id,
-          active:data['isActive']
-      })
-      .then(function(response){
-        console.log(response);
-      })
-        .catch(function(error){
-          console.log(error);
-        })
- 
-      console.log(this.current_list)
-    },
-
-    startGame:function(){
-      self = this
-      axios.get(url + '/start_game',{
-      })
-      .then(function(response){
-        self.result_content = response.data
-        console.log(self.result_content)
-        let re = eval(self.result_content)
-        self.team1 = self.getIdList(re[0])
-        self.team2 = self.getIdList(re[1])
-        self.show_all = false
-        let axiosUrl = url + "/update_show_all"
-        axios.post(axiosUrl,{
-            show_all:"false",
-        })
-        .then(function(response){
-          console.log(response);
-        })
-          .catch(function(error){
-            console.log(error);
-        })
-   
-      })
-      .catch(function(error){
-        console.log(error);
-      })
-    },
-
-    resetGame:function(){
-      let axiosUrl = url + "/reset_game"
-      let self=this
-      axios.get(axiosUrl)
-        .then(function(response){})
-      .catch(function(error){
-          console.log(error);
-        })
-    
     },
 
     getIdList:function(nameList){
@@ -190,13 +118,52 @@ export default {
         } 
       })
       return idList
+    },
+
+    getNameList:function(idList){
+      var nameList = []
+       
+      idList.forEach(v=>{
+         nameList.push(this.name_dict[v]) 
+      })
+      return nameList
+    },
+
+
+    winClick:function(index){
+      console.log(index) 
+      let axiosUrl = this.url + "/update"
+      if (this.psdInput != this.passWord){
+        alert('password wrong!') 
+        return 
+      }
+      var winners = ""
+      var losers = ""
+
+      if (index == "1"){
+        winners = getNameList(this.team1).join(',')  
+        losers = getNameList(this.team2).join(',')
+      }else{
+         winners = getNameList(this.team2).join(',')  
+        losers = getNameList(this.team1).join(',')
+      }
+      axios.post(axiosUrl,{
+          winners:winners,
+          losers:losers
+      })
+      .then(function(response){
+        console.log(response);
+      })
+        .catch(function(error){
+          console.log(error);
+        })
+ 
+      console.log(winners)
     }
-
   },
+  }
 
-}
 </script>
-
 
 <style>
 body{
@@ -334,7 +301,7 @@ body{
   font-size:40px;
   text-align: center;
 	display: inline-block;
-	margin:330px auto;
+	margin:200px auto;
     font-weight: bold;
     padding: 10px ;
     background-color: lightgray;
@@ -352,7 +319,7 @@ body{
   font-size:40px;
   text-align: center;
 	display: inline-block;
-	margin:330px 30px;
+	margin:200px 30px;
     font-weight: bold;
     padding: 10px ;
     background-color: lightgray;
@@ -374,5 +341,11 @@ body{
 
 .show-team{
   margin-top:30px;
+}
+
+.psd-input{
+  display:block;
+  margin: 40px auto;
+  font-size:30px;
 }
 </style>

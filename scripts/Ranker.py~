@@ -1,4 +1,5 @@
 import copy
+import json
 
 class Ranker:
     player_dict = {}
@@ -85,7 +86,7 @@ class Ranker:
                     f.write("%s\t%s\t%s\n" % (ll[0],games,rate))
                 else:
                     f.write(line)
-        return "sucess"
+        return "success"
 
     def show_list(self):
         player_map = {
@@ -109,7 +110,7 @@ class Ranker:
                             "rate":0.5,
                             }
                 line = f.readline()
-        return player_map
+        return json.dumps(player_map)
 
 if __name__ == "__main__":
     ranker = Ranker()

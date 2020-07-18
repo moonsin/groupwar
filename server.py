@@ -73,10 +73,11 @@ def start_game():
 def show_list():
     return str(ranker.show_list())
 
-@app.route("/update")
+@app.route("/update",methods=['post','get'])
 def update():
-    winners = request.args.get('winners')
-    losers = request.args.get('losers')
+    data = request_parse(request)
+    winners =data['winners']
+    losers = data['losers']
     logging.info("update?winners=%s&losers=%s" % (winners,losers))
     return ranker.update(winners.split(','),losers.split(','))
 
@@ -103,8 +104,6 @@ def reset_game():
     team2 = []
     current_list = []
     return "success"
-
-
 
 @app.route("/update_current_list",methods=['post','get'])
 def update_current_list():

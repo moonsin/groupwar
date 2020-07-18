@@ -21,7 +21,7 @@
       :current-list=current_list> 
     </startgame-character>
    </div  >
-   <h1 class="title"> VS </h1>
+   <h1 class="title" v-if="!show_all"> VS </h1>
     <div class="show-team">
     <startgame-character  
       v-for="id in team2" 
@@ -72,6 +72,7 @@ export default {
           team1:[],
           team2:[],
           show_all:true,
+          url:'http://localhost:9527'
       }
   },
 
@@ -83,13 +84,13 @@ export default {
   methods:{
 
     getCurrentList: function(){
-      let axiosUrl = "http://localhost:9527/get_current_list"
+      let axiosUrl = url + "/get_current_list"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
           setTimeout(() =>{
             self.getCurrentList() 
-          },500)
+          },50)
           self.current_list = response.data.split(',')
         })
       .catch(function(error){
@@ -98,13 +99,13 @@ export default {
     },
 
     getShowAll:function(){
-       let axiosUrl = "http://localhost:9527/get_show_all"
+       let axiosUrl = url + "/get_show_all"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
           setTimeout(() =>{
             self.getShowAll() 
-          },100)
+          },50)
           let result = eval(response.data)
           self.show_all = result[0]=="true"
           self.team1 = self.getIdList(result[1])
@@ -123,7 +124,7 @@ export default {
       let id=data['id']
       var index = this.current_list.indexOf(id)
       index == -1 ? this.current_list.push(id):this.current_list.splice(index,1);
-      let axiosUrl = "http://localhost:9527/update_current_list"
+      let axiosUrl = url + "/update_current_list"
       axios.post(axiosUrl,{
           id:id,
           active:data['isActive']
@@ -140,7 +141,7 @@ export default {
 
     startGame:function(){
       self = this
-      axios.get('http://localhost:9527/start_game',{
+      axios.get(url + '/start_game',{
       })
       .then(function(response){
         self.result_content = response.data
@@ -149,7 +150,7 @@ export default {
         self.team1 = self.getIdList(re[0])
         self.team2 = self.getIdList(re[1])
         self.show_all = false
-        let axiosUrl = "http://localhost:9527/update_show_all"
+        let axiosUrl = url + "/update_show_all"
         axios.post(axiosUrl,{
             show_all:"false",
         })
@@ -167,7 +168,7 @@ export default {
     },
 
     resetGame:function(){
-      let axiosUrl = "http://localhost:9527/reset_game"
+      let axiosUrl = url + "/reset_game"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){})
