@@ -72,7 +72,7 @@ export default {
           team1:[],
           team2:[],
           show_all:true,
-          url:'http://localhost:9527'
+          url:'http://104.160.45.150:9527'
       }
   },
 

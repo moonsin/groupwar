@@ -63,7 +63,7 @@ export default {
           show_all:true,
           psdInput:'',
           passWord:'godloveshuman',
-          url:'http://localhost:9527'
+          url:'http://104.160.45.150:9527'
       }
   },
   mounted (){

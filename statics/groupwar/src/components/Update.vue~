@@ -63,7 +63,7 @@ export default {
           show_all:true,
           psdInput:'',
           passWord:'godloveshuman',
-          url:'http://localhost:9527'
+          url:'http://104.160.45.150:9527'
       }
   },
   mounted (){
@@ -141,11 +141,11 @@ export default {
       var losers = ""
 
       if (index == "1"){
-        winners = getNameList(this.team1).join(',')  
-        losers = getNameList(this.team2).join(',')
+        winners = this.getNameList(this.team1).join(',')  
+        losers = this.getNameList(this.team2).join(',')
       }else{
-         winners = getNameList(this.team2).join(',')  
-        losers = getNameList(this.team1).join(',')
+         winners = this.getNameList(this.team2).join(',')  
+        losers = this.getNameList(this.team1).join(',')
       }
       axios.post(axiosUrl,{
           winners:winners,

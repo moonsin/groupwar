@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       diaoMaoList: [],
-      url:'http://localhost:9527',
+      url:'http://104.160.45.150:9527',
       name_dict:{
           "代练哥":"dailiange",
           "西奈":"xinai",
