@@ -84,7 +84,7 @@ export default {
   methods:{
 
     getCurrentList: function(){
-      let axiosUrl = url + "/get_current_list"
+      let axiosUrl =this.url + "/get_current_list"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
@@ -99,7 +99,7 @@ export default {
     },
 
     getShowAll:function(){
-       let axiosUrl = url + "/get_show_all"
+       let axiosUrl = this.url + "/get_show_all"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){
@@ -124,7 +124,7 @@ export default {
       let id=data['id']
       var index = this.current_list.indexOf(id)
       index == -1 ? this.current_list.push(id):this.current_list.splice(index,1);
-      let axiosUrl = url + "/update_current_list"
+      let axiosUrl = this.url + "/update_current_list"
       axios.post(axiosUrl,{
           id:id,
           active:data['isActive']
@@ -141,7 +141,7 @@ export default {
 
     startGame:function(){
       self = this
-      axios.get(url + '/start_game',{
+      axios.get(this.url + '/start_game',{
       })
       .then(function(response){
         self.result_content = response.data
@@ -150,7 +150,7 @@ export default {
         self.team1 = self.getIdList(re[0])
         self.team2 = self.getIdList(re[1])
         self.show_all = false
-        let axiosUrl = url + "/update_show_all"
+        let axiosUrl = this.url + "/update_show_all"
         axios.post(axiosUrl,{
             show_all:"false",
         })
@@ -168,7 +168,7 @@ export default {
     },
 
     resetGame:function(){
-      let axiosUrl = url + "/reset_game"
+      let axiosUrl = this.url + "/reset_game"
       let self=this
       axios.get(axiosUrl)
         .then(function(response){})
